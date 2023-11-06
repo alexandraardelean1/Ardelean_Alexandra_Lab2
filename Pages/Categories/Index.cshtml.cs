@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Ardelean_Alexandra_Lab2.Data;
 using Ardelean_Alexandra_Lab2.Models;
+using System.Security.Cryptography.X509Certificates;
 using Ardelean_Alexandra_Lab2.Models.ViewModels;
 
 namespace Ardelean_Alexandra_Lab2.Pages.Categories
@@ -20,25 +21,32 @@ namespace Ardelean_Alexandra_Lab2.Pages.Categories
             _context = context;
         }
 
-        public IList<Category> Category { get;set; } = default!;
+        public IList<Category> Category { get; set; } = default!;
 
-        public CategoriesIndexData CategoryData { get; set; }
+        public BookData BookD { get; set; }
         public int CategoryID { get; set; }
         public int BookID { get; set; }
         public async Task OnGetAsync(int? id, int? bookID)
         {
-            CategoryData = new CategoriesIndexData();
-            CategoryData.Categories  = await _context.Category 
-            .Include(i => i.BookCategories)
-            .ThenInclude(c => c.Author)
-            .OrderBy(i => i.PublisherName)
-            .ToListAsync();
+            BookD = new BookData();
+            BookD.Categories = await _context.Category
+                .Include(b => b.BookCategories)
+                .ThenInclude(b => b.Book)
+                .OrderBy(b => b.CategoryName)
+                .ToListAsync();
+            BookD.BookCategories = await _context.BookCategory
+                .Include(b => b.Category)
+                .Include(b => b.Book)
+                .OrderBy(b => b.Book)
+                .ToListAsync();
             if (id != null)
             {
                 CategoryID = id.Value;
-                Category category = CategoryData.Categories
-                .Where(i => i.ID == id.Value).Single();
-                CategoryData.Books = category.BookCategories;
+                BookD.Books = await _context.BookCategory
+                .Where(bc => bc.CategoryID == CategoryID)
+                .Select(bc => bc.Book)
+                .ToListAsync();
             }
         }
+    }
 }

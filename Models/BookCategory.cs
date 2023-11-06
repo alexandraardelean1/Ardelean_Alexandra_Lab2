@@ -1,4 +1,5 @@
-﻿namespace Ardelean_Alexandra_Lab2.Models
+﻿using System.ComponentModel.DataAnnotations;
+namespace Ardelean_Alexandra_Lab2.Models
 {
     public class BookCategory
     {
