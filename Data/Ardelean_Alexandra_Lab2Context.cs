@@ -21,7 +21,7 @@ namespace Ardelean_Alexandra_Lab2.Data
 
         public DbSet<Ardelean_Alexandra_Lab2.Models.Publisher>? Publisher { get; set; }
 
-        public DbSet<Ardelean_Alexandra_Lab2.Models.Author>? Author { get; set; }
+        public DbSet<Ardelean_Alexandra_Lab2.Models.Author>? Authors { get; set; }
 
         public DbSet<Ardelean_Alexandra_Lab2.Models.Category>? Category { get; set; }
         public DbSet<Ardelean_Alexandra_Lab2.Models.BookCategory>? BookCategory { get; set; }
